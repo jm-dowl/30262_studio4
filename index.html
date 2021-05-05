@@ -18,6 +18,11 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="./leaflet-heat.js"></script>
 
+		#map {
+	      border-radius: 10px;
+	      height: 600px;
+	    }
+
 </head>
 
 <body>
@@ -78,9 +83,11 @@ $.getJSON("rodents.geojson",function(data){
     return location;
   });
 
-  var heat = L.heatLayer(locations, { radius: 35 });
-  map.addLayer(heat);
-});
+	var heat = L.heatLayer([
+		[50.5, 30.5, 0.2], // lat, lng, intensity
+		[50.6, 30.4, 0.5],
+		...
+	], {radius: 25}).addTo(map);
 
   </script>
 </body>
