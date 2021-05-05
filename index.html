@@ -15,8 +15,9 @@
   <!-- Adding styling info for page layout by reading in a CSS file -->
   <link rel="stylesheet" href="styles.css"></link>
 	<!--Adding leaflet css styles and javascript library-->
-	<link rel="stylesheet" href="./Leaflet-1.0.3/leaflet.css"/>
-  <script src="./Leaflet-1.0.3/leaflet.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 </head>
 
@@ -64,7 +65,13 @@
 		  maxZoom: 17,
 		  minZoom: 9
 		}).addTo(map);
-				
+
+		// load GeoJSON from an external file
+$.getJSON("rodents.geojson",function(data){
+	// add GeoJSON layer to the map once the file is loaded
+	L.geoJson(data).addTo(map);
+});
+
   </script>
 </body>
 
