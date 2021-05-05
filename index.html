@@ -14,6 +14,9 @@
   </style>
   <!-- Adding styling info for page layout by reading in a CSS file -->
   <link rel="stylesheet" href="styles.css"></link>
+	<!--Adding leaflet css styles and javascript library-->
+	<link rel="stylesheet" href="./Leaflet-1.0.3/leaflet.css"/>
+  <script src="./Leaflet-1.0.3/leaflet.js"></script>
 
 </head>
 
@@ -30,60 +33,38 @@
 
 
   <!-- Add a div to give the map somewhere to go -->
-  <div id='map'></div>
-  <div class='map-overlay' id='features'><h2>US population density</h2><div id='pd'><p>Hover over a state!</p></div></div>
-  <div class='map-overlay' id='legend'></div>
+	<div id="map"></div>
 
   <script>
-    /* Add your access token*/
-    mapboxgl.accessToken = 'pk.eyJ1Ijoiam0tZG93bCIsImEiOiJja25rc2VvOTMwYzF0MnZudjltMGh0dWpwIn0.-UcF1LG4oAox3A9YWUWs7w';
 
-    /* Create a variable called "map" to house your map*/
-      var map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/jm-dowl/cknxpa3rl23f517p6dzfpveim' // replace this with your style URL
-      });
+  // initialize the map
+  var map = L.map('map').setView([42.35, -71.08], 13);
 
-      map.on('load', function() {
-        /* Add a legend*/
-        var layers = ['0-10', '10-20', '20-50', '50-100', '100-200', '200-500', '500-1000', '1000+'];
-        var colors = ['#f1eef6', '#f1eef6', '#d4b9da', '#c994c7', '#df65b0', '#e7298a', '#ce1256', '#91003f'];
-        for (i = 0; i < layers.length; i++) {
-          var layer = layers[i];
-          var color = colors[i];
-          var item = document.createElement('div');
-          var key = document.createElement('span');
-          key.className = 'legend-key';
-          key.style.backgroundColor = color;
-
-          var value = document.createElement('span');
-          value.innerHTML = layer;
-          item.appendChild(key);
-          item.appendChild(value);
-          legend.appendChild(item);
-        };
-
-        /* Add mouse over action */
-        map.on('mousemove', function(e) {
-          var states = map.queryRenderedFeatures(e.point, {
-            layers: ['statedata']
-          });
-
-          if (states.length > 0) {
-            document.getElementById('pd').innerHTML = '<h3><strong>' + states[0].properties.name + '</strong></h3><p><strong><em>' + states[0].properties.density + '</strong> people per square mile</em></p>';
-          } else {
-            document.getElementById('pd').innerHTML = '<p>Hover over a state!</p>';
-          }
-        });
-
-      })  ;
+  // load a tile layer
+  L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
+    {
+      attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+      maxZoom: 17,
+      minZoom: 9
+    }).addTo(map);
 
 
+		// base map
+		L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
+		{
+		  attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>,
+		    Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+		  maxZoom: 17,
+		  minZoom: 9
+		}).addTo(map);
 
-      map.getCanvas().style.cursor = 'default';
-
-      map.getCanvas().style.cursor = 'default';
-
+		// bike lanes
+		L.tileLayer('http://tiles.mapc.org/trailmap-onroad/{z}/{x}/{y}.png',
+		{
+		  maxZoom: 17,
+		  minZoom: 9
+		}).addTo(map);
+				
   </script>
 </body>
 
