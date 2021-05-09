@@ -38,27 +38,54 @@
   </ul>
   <br>
 
+  <!-- div map container -->
+   <div id="mapId"></div>
 
-  <div id="map"></div>
+   <script>
+   // Main Heat Map
+   // initialize the map
+   var map = L.map('mapId').setView([42.35, -71.08], 13);
 
-  <!-- <script src="../node_modules/simpleheat/simpleheat.js"></script>
-  <script src="../src/HeatLayer.js"></script> -->
+  // load a tile layer
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+  attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">Carto</a> | Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+      maxZoom: 17,
+      minZoom: 9
+    }).addTo(map);
 
-  <script src="../dist/leaflet-heat.js"></script>
+  map.setZoom(12);
+  $.getJSON("rodents.geojson",function(data){
+    var locations = data.features.map(function(rat) {
+      // the heatmap plugin wants an array of each location
+      var location = rat.geometry.coordinates.reverse();
+      location.push(0.5);
+      return location; // e.g. [50.5, 30.5, 0.2], // lat, lng, intensity
+    });
 
-  <script src="http://leaflet.github.io/Leaflet.markercluster/example/realworld.10000.js"></script>
-  <script>
+    var heat = L.heatLayer(locations, {
+     radius: 35,
+     gradient: {0.25: '#593d9c', 0.5: '#b8627d', 0.85: '#efe350'}
+    });
+    map.addLayer(heat);
+  });
+    // Add Scale Bar to Map
+   L.control.scale({position: 'bottomleft'}).addTo(map);
+   // Create Leaflet Control Object for Legend
+   var legend = L.control({position: 'topright'});
 
-  var map = L.map('map').setView([-37.87, 175.475], 12);
-
-  var tiles = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-  }).addTo(map);
-
-  addressPoints = addressPoints.map(function (p) { return [p[0], p[1]]; });
-
-  var heat = L.heatLayer(addressPoints).addTo(map);
-
-  </script>
-  </body>
-  </html>
+   // Function that runs when legend is added to map
+   legend.onAdd = function (map) {
+   // Create Div Element and Populate it with HTML
+   var div = L.DomUtil.create('div', 'legend');
+   div.innerHTML += '<b>Boston Rat Heat Map</b><br />';
+   div.innerHTML += '<i style="background: #efe350"></i><p>> 0.85</p>';
+   div.innerHTML += '<i style="background: #b8627d"></i><p>> 0.50</p>';
+   div.innerHTML += '<i style="background: #593d9c"></i><p>> 0.25</p>';
+   // Return the Legend div containing the HTML content
+   return div;
+ };
+   // Add Legend to Map
+   legend.addTo(map);
+   </script>
+ </body>
+ </html>
