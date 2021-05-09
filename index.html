@@ -15,7 +15,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
   <style>
-  /* Row 1 Maps */
       #mapId { /* Main Final Map Center Top */
       position: absolute;
       margin-bottom: 1%;
@@ -134,12 +133,11 @@
 
     var heat = L.heatLayer(locations, {
      radius: 35,
-     gradient: {0.25: '#593d9c', 0.5: '#b8627d', 0.85: '#efe350'}
+     gradient: {0.25: 'fee0d2', 0.5: '#fc9272', 0.85: '#de2d26'}
     });
     map.addLayer(heat);
   });
-    // Add Scale Bar to Map
-   L.control.scale({position: 'bottomleft'}).addTo(map);
+
    // Create Leaflet Control Object for Legend
    var legend = L.control({position: 'topright'});
 
@@ -148,9 +146,9 @@
    // Create Div Element and Populate it with HTML
    var div = L.DomUtil.create('div', 'legend');
    div.innerHTML += '<b>Boston Rat Heat Map</b><br />';
-   div.innerHTML += '<i style="background: #efe350"></i><p>> 0.85</p>';
-   div.innerHTML += '<i style="background: #b8627d"></i><p>> 0.50</p>';
-   div.innerHTML += '<i style="background: #593d9c"></i><p>> 0.25</p>';
+   div.innerHTML += '<i style="background: #fee0d2"></i><p>> 0.85</p>';
+   div.innerHTML += '<i style="background: #fc9272"></i><p>> 0.50</p>';
+   div.innerHTML += '<i style="background: #de2d26"></i><p>> 0.25</p>';
    // Return the Legend div containing the HTML content
    return div;
  };
