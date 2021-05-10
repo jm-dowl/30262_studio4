@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Studio 4</title>
+  <!--Leaflet style sheet and Library --->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="MarkerCluster.Default.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="./leaflet/leaflet-heat.js"></script>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+  <style>
+      #mapId { /* Main Final Map Center Top */
+      position: absolute;
+      margin-bottom: 1%;
+      height: inherit;
+      top: 250px;
+      bottom: 0%;
+      width: 100%;
+        }
+      .maps {
+        position: absolute;
+        top: 100%;
+        width: 100%;
+        text-align: center;
+        display: flex;
+      }
+      .gallery {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 1%;
+      }
+      .legend {
+	      line-height: 18px;
+	      color: #333333;
+	      font-family: 'Open Sans', Helvetica, sans-serif;
+	      padding: 6px 8px;
+      	background: white;
+      	background: rgba(255,255,255,0.8);
+      	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      	border-radius: 5px;
+      }
+
+      .legend i {
+      	width: 18px;
+      	height: 18px;
+      	float: left;
+      	margin-right: 8px;
+      	opacity: 0.7;
+      }
+
+      .legend img {
+      	width: 18px;
+      	height: 18px;
+      	float: left;
+      }
+
+      .legend p {
+      	font-size: 12px;
+      	line-height: 18px;
+      	margin: 0;
+      }
+  </style>
+  <!-- Adding styling info for page layout by reading in a CSS file -->
+  <link rel="stylesheet" href="styles.css">
+
+<title>Studio Week 4</title>
+ <!--Leaflet style sheet and Library --->
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+ <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css" />
+ <link rel="stylesheet" href="./MarkerCluster.Default.css" />
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ <script src="./leaflet/leaflet-heat.js"></script>
+ <!-- stylesheet for social media icons --->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <!-- stylesheet for fonts --->
+ <link rel="preconnect" href="https://fonts.gstatic.com">
+ <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+
+ <!-- Adding styling info for page layout by reading in a CSS file -->
+ <link rel="stylesheet" href="styles.css">
+
+		<style>
+	         #map { width: 1000px; height: 800px; }
+	         body { font: 16px/1.4 "Helvetica Neue", Arial, sans-serif; }
+	         .ghbtns { position: relative; top: 4px; margin-left: 5px; }
+	         a { color: #0077ff; }
+	     </style>
+
+</head>
+
+<body>
+  <h1>  Studio 4 <br>  Hosted GeoJSON Map </h1>
+  <!-- Add multiple pages to web page-->
+  <!-- active class displays the grey box around current page-->
+  <ul>
+  	<li><a class="active" href="index.html" target="_self">Output 1</a></li>
+    <li><a href="googlesheet.html" target="_self">Output 2</a></li>
+    <li><a href="ownadventure.html" target="_self">Output 3</a></li>
+  </ul>
+  <br>
+
+  <!-- div map container -->
+   <div id="mapId"></div>
+
+   <script>
+   // Main Heat Map
+   // initialize the map
+   var map = L.map('mapId').setView([42.35, -71.08], 13);
+
+  // load a tile layer
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+  attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">Carto</a> | Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+      maxZoom: 17,
+      minZoom: 9
+    }).addTo(map);
+
+  map.setZoom(12);
+  $.getJSON("rodents.geojson",function(data){
+    var locations = data.features.map(function(rat) {
+      // the heatmap plugin wants an array of each location
+      var location = rat.geometry.coordinates.reverse();
+      location.push(0.5);
+      return location; // e.g. [50.5, 30.5, 0.2], // lat, lng, intensity
+    });
+
+    var heat = L.heatLayer(locations, {
+     radius: 35,
+     gradient: {0.25: 'fee0d2', 0.5: '#fc9272', 0.85: '#de2d26'}
+    });
+    map.addLayer(heat);
+  });
+
+   // Create Leaflet Control Object for Legend
+   var legend = L.control({position: 'topright'});
+
+   // Function that runs when legend is added to map
+   legend.onAdd = function (map) {
+   // Create Div Element and Populate it with HTML
+   var div = L.DomUtil.create('div', 'legend');
+   div.innerHTML += '<b>Boston Rat Heat Map</b><br />';
+   div.innerHTML += '<i style="background: #fee0d2"></i><p>> 0.85</p>';
+   div.innerHTML += '<i style="background: #fc9272"></i><p>> 0.50</p>';
+   div.innerHTML += '<i style="background: #de2d26"></i><p>> 0.25</p>';
+   // Return the Legend div containing the HTML content
+   return div;
+ };
+   // Add Legend to Map
+   legend.addTo(map);
+   </script>
+ </body>
+ </html>
