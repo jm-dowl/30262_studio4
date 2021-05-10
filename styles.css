@@ -28,12 +28,13 @@ h3 {
 
 p {
     font-family: monospace;
-  font-size: 0.85em;
+  font-size: 1.0em;
   margin: 10px;
   text-align: left;
 }
 
 li {
+    font-size: 1.4em;
  float: left;
  border-right: 2px solid white;
 }
