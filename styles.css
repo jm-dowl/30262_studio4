@@ -2,8 +2,8 @@ styles.CSS
 
 ul {
  list-style-type: none;
- margin: 1px;
- padding: 1px;
+ margin: 0px;
+ padding: 0px;
  overflow: hidden;
  background-color: white;
 }
