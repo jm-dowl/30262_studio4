@@ -93,7 +93,7 @@
 
     var transformRequest = (url, resourceType) => {
       var isMapboxRequest =
-        url.slice(8, 22) === "api.mapbox.com" ||
+        url.slice(8, 22) === "api.mapbox.com"
         url.slice(10, 26) === "tiles.mapbox.com";
       return {
         url: isMapboxRequest
@@ -103,10 +103,10 @@
     };
     //YOUR TURN: add your Mapbox token
 //add a basemap style
-    mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94LWNvbW11bml0eSIsImEiOiJja2tkN21jcjAwMG51MnBxdHAxemdueGpzIn0.e0IzLkytGq4pcGGieP8KNA'; //Mapbox token
+    mapboxgl.accessToken = 'pk.eyJ1Ijoiam0tZG93bCIsImEiOiJja29qMnhlejEwMndrMm9ydnV3YXd1ODE1In0.5sZrt9riObc5zJgv5i6bLw'; //Mapbox token
     var map = new mapboxgl.Map({
       container: 'map', // container id
-      style: 'mapbox://styles/mapbox/streets-v11', // YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
+      style: 'mapbox://styles/mapbox/dark-v10', // YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
       center: [-122.411, 37.785], // starting position [lng, lat]
       zoom: 10,// starting zoom
       transformRequest: transformRequest
