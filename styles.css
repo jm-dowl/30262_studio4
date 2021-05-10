@@ -54,11 +54,11 @@ li a {
 
 /* Links will change color when hovered over */
 li a:hover {
- background-color: #a09f9f;
+ background-color: #effe0b;
 }
 
 .active {
- background-color: #a09f9f;
+ background-color: #120ff9;
 }
 
 body {
